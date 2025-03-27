@@ -52,6 +52,17 @@ key_comments = {
 # Initialize an empty list to store (start, end) positions
 my_list = []
 
+#Now we will run a loop through the dictionary and find the required start and end positions
+for key, word in key_comments.items():
+    start_position = customer_feedback.find(word)  #Finds the start position of the word
+    if start_position != -1:  #If the word is found then the next step happens
+        end_position = start_position + len(word)  #Calculates the end position
+        my_list.append((start_position, end_position))  #This appends the tuple to the list
+
+#Lastly we will print the list of the required positions
+print(my_list)
+
+
 ##########################################################################################################################################################
 
 # Question 2 - Functions
@@ -60,17 +71,39 @@ my_list = []
 # that will take the values and return the metric needed. Use the first two and last two digits of your ID number as the input values.
 
 # Insert first two digits of ID number here:
+first_two_digits = 75
 # Insert last two digits of ID number here:
+last_two_digits = 47
+
+#I am Assuming values for the calculating
+operating_profit = 5000  
+revenue = 20000 
+number_of_customers = 1000 
+lost_customers = 50
+total_orders = 800
 
 # Write your code for Operating Profit Margin
+def operating_profit_margin(operating_profit, revenue):
+    return (operating_profit / revenue) * 100
 
 # Write your code for Revenue per Customer
+def revenue_per_customer(revenue, number_of_customers):
+    return revenue / number_of_customers
 
 # Write your code for Customer Churn Rate
+def customer_churn_rate(lost_customers, total_customers):
+    return (lost_customers / total_customers) * 100
 
 # Write your code for Average Order Value
+def average_order_value(total_revenue, total_orders):
+    return total_revenue / total_orders
+ 
+# Call your designed functions here and also printing them
+print(f"Operating Profit Margin: {opm:.2f}%")
+print(f"Revenue per Customer: GBP {rpc:.2f}")
+print(f"Customer Churn Rate: {churn_rate:.2f}%")
+print(f"Average Order Value: GBP {aov:.2f}")
 
-# Call your designed functions here
 
 ##########################################################################################################################################################
 
@@ -97,6 +130,45 @@ Price (£)    Demand (Units)
 """
 
 # Write your code here
+#To do plotting, we will import matplotlib and for regression we will use sklearn
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+prices = np.array([20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]).reshape(-1,1)
+demand = np.array([300, 280, 260, 240, 210, 190, 160, 140, 120, 100, 85])
+
+#Getting the regression model
+model = LinearRegression()
+model.fit(prices, demand)
+
+#With this we will get the slope
+b = model.coef_[0]
+m = model.intercept_
+
+#This funtion getws the price at which we can maximise the revenue
+def revenue_function(price):
+    return price * (slope * price + intercept)
+
+#Now we will calculate the optimal price
+optimal_price = - m / (2 * b)
+
+#Calculate the demand at GBP52
+predicted_demand = model.predict(np.array([[52]]))
+
+#Printing both the derived values
+print(f"The price that can maximise the revenue is: GBP {optimal_price}")
+print(f"The predicted demand at GBP 52 is: {predicted_demand}")
+
+#Using matplotlib to get the graph
+plt.scatter(prices, demand, color='blue', label='Data Points')
+plt.plot(prices, model.predict(prices), color='red', label='Regression Line')
+plt.xlabel('Price (£)')
+plt.ylabel('Demand (Units)')
+plt.title('Price vs Demand Regression')
+plt.legend()
+plt.show()
+
 
 ##########################################################################################################################################################
 
@@ -112,6 +184,26 @@ random_numbers = [random.randint(1, max_value) for i in range(0,100)]
 # Plotting the numbers in a line chart
 plt.plot(random_numbers, marker='O', markercolor='green', markeredgcolor='red', linestyle='--', lable='Random Numbers', color='blue');
 plt.title(Line Chart of 100 Random Numbers)
+plt.xlabel="Index"
+plt.ylabel="Random Number"
+plt.legend('---')
+plt.grid(True)
+plt.show()
+
+########################################################################
+I have mentioned in the comments what were the errors and what the fix was
+
+import random
+import matplotlib.pyplot as plt
+
+# Generate 100 random numbers between 1 and student id number
+max_value = int(input("Enter your Student ID: ")) #int was written as integer
+random_numbers = [random.randint(1, max_value) for i in range(0,100)]
+
+# Plotting the numbers in a line chart
+plt.plot(random_numbers, marker='o', markerfacecolor='green', markeredgecolor='red', linestyle='--', label='Random Numbers', color='blue');
+#The above line had multiple type errors like markedcolor, morderedgcolor and lable, so corrected those also marker was given capital O instead of small o
+plt.title("Line Chart of 100 Random Numbers") #The line was not inside the quotes
 plt.xlabel="Index"
 plt.ylabel="Random Number"
 plt.legend('---')
